@@ -33,7 +33,6 @@ class Vector:
         '''
         return self
     
-    @staticmethod
     def getLength(self) -> int:
         '''
         A function that returns the length of a vector.
@@ -41,7 +40,6 @@ class Vector:
         return math.sqrt(self.x * self.x + self.y * self.y + self.z * self.z)
         
     #---Operations---#
-    @staticmethod
     def __add__(self, other: 'Vector') -> 'Vector':
         '''
         A function that adds two vectors together. Overloads the '+' operator for vectors.
@@ -59,7 +57,6 @@ class Vector:
 
         return Vector(self.x + other.x, self.y + other.y, self.z + other.z)
     
-    @staticmethod
     def __sub__(self, other: 'Vector') -> 'Vector':
         '''
         A function that subtracts two vectors together. Overloads the '-' operator for vectors.
@@ -77,7 +74,6 @@ class Vector:
 
         return Vector(self.x - other.x, self.y - other.y, self.z - other.z)
     
-    @staticmethod
     def __mul__(self, scalar: int) -> 'Vector':
         '''
         A function that multiplies a vector by a scalar. Overloads the '*' operator for vectors.
@@ -94,8 +90,7 @@ class Vector:
         '''
 
         return Vector(self.x * scalar, self.y * scalar, self.z * scalar)
-    
-    @staticmethod
+
     def __truediv__(self, scalar: int) -> 'Vector':
         '''
         A function that divides a vector by a scalar. Overloads the '/' operator for vectors.
@@ -113,7 +108,6 @@ class Vector:
 
         return Vector(self.x / scalar, self.y / scalar, self.z / scalar)
     
-    @staticmethod
     def __eq__(self, other: 'Vector') -> bool:
         '''
         A function that checks if two vectors are equal. Overloads the '==' operator for vectors.
@@ -128,10 +122,10 @@ class Vector:
         result: bool
             A boolean value representing whether the two vectors are equal.
         '''
-
-        return self.x == other.x and self.y == other.y and self.z == other.z
+        if isinstance(other, Vector):
+            return self.x == other.x and self.y == other.y and self.z == other.z
+        return False
     
-    @staticmethod
     def __ne__(self, other: 'Vector') -> bool:
         '''
         A function that checks if two vectors are not equal. Overloads the '!=' operator for vectors.
@@ -151,7 +145,6 @@ class Vector:
     
     #---Functions---#
 
-    @staticmethod
     def dotProduct(self, other: 'Vector') -> int:
         '''
         A function that calculates the dot product of two vectors.
@@ -169,7 +162,6 @@ class Vector:
 
         return int(self.x * other.x + self.y * other.y + self.z * other.z)
     
-    @staticmethod
     def normalize(self) -> 'Vector':
         '''
         A function that 'normalize's a vector. Makes a vector have a length of 1.
