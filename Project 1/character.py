@@ -54,7 +54,7 @@ Character 2 sets up the 'flee' steering behavior.
 Its behavior should allow this character to 'fish hook' away from the origin.
 '''
 character_26_02 = Character(2602, FLEE)
-character_26_02.position = [-30, -50]
+character_26_02.position = vector.Vector(-30, -50)
 character_26_02.velocity = vector.Vector(2, 7)
 character_26_02.orientation = math.pi/4
 character_26_02.maxVelocity = 8
@@ -67,7 +67,7 @@ Character 3 sets up the 'seek' steering behavior.
 Its behavior should allow this character to 'orbit' the origin.
 '''
 character_26_03 = Character(2603, SEEK)
-character_26_03.position = [-50, 40]
+character_26_03.position = vector.Vector(-50, 40)
 character_26_03.velocity = vector.Vector(0, 8)
 character_26_03.orientation = (3*math.pi)/4
 character_26_03.maxVelocity = 8
@@ -80,7 +80,7 @@ Character 4 sets up the 'arrive' steering behavior.
 Its behavior should allow it to 'hit' the origin, by slowing down as it approaches.
 '''
 character_26_04 = Character(2604, ARRIVE)
-character_26_04.position = [50, 75]
+character_26_04.position = vector.Vector(50, 75)
 character_26_04.velocity = vector.Vector(-9, 4)
 character_26_04.orientation = math.pi
 character_26_04.maxVelocity = 10
