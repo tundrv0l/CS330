@@ -4,10 +4,11 @@
 # Description: A file that contains the movement functions for the characters.
 -----------------'''
 
+from character import *
 import character
 import vector
 
-#TODO: Add more movement functions. Fix the returnTrajectory function. Add main time loop.
+#TODO:Add main time loop. Add update function. make file handling not nuke everything after its closed.
 
 #---Define return structure class---#
 class SteeringOutput:
@@ -37,6 +38,8 @@ def dynamicGetSteeringContinue(character: character.Character) -> SteeringOutput
         result: SteeringOutput
             A structure with the current linear and angular acceleration.
         '''
+    
+    # Create a new steering output object, and return the current values.
     result = SteeringOutput(character.linear, character.angular)
     return result
 
@@ -47,7 +50,7 @@ def dynamicGetSteeringSeek(character: character.Character, target: character.Cha
         Parameters
         ----------
         character: Character
-            The character object that is seeking.
+            The character object that is  the 'seeker'.
 
         target: Character
             The target character object to seek.
@@ -57,7 +60,11 @@ def dynamicGetSteeringSeek(character: character.Character, target: character.Cha
         result: SteeringOutput
             A structure with the updated linear and angular acceleration.
         '''
+    
+    # Create a new steering output object
     result = SteeringOutput(vector.Vector(0,0), 0.0)
+
+    # Calculate the direction to the target, normalize it, and scale it to the max linear speed.
     result.linear = target.position - character.position
     result.linear.normalize()
     result.linear = result.linear * character.maxLinear
@@ -81,7 +88,11 @@ def dynamicGetSteeringFlee(character: character.Character, target: character.Cha
         result: SteeringOutput
             A structure with the updated linear and angular acceleration.
         '''
+    
+    # Create a new steering output object
     result = SteeringOutput(vector.Vector(0,0), 0.0)
+
+    # Calculate the direction away from the target, scale and normalize it to the max linear speed.
     result.linear = character.position - target.position
     result.linear.normalize()
     result.linear = result.linear * character.maxLinear
@@ -106,9 +117,11 @@ def dynamicGetSteeringArrive(character: character.Character, target: character.C
             A structure with the updated linear and angular acceleration.
         '''
     
+    # Create a new steering output object. Normalize a direction vector to the target.
     result = SteeringOutput(vector.Vector(0,0), 0.0)
     direction = target.position - character.position
     distance = direction.normalize()
+
     # Check the to see if the character is within the arrive radius
     if distance < character.arriveRadius:
         targetSpeed = 0
@@ -155,4 +168,10 @@ def returnTrajectory(character: character.Character, time: float) -> str:
             A formatted string for the trajectory data file.
     '''
 
-    data = f'{time},{character.id},{character.position[0]},{character.position[1]},{character.velocity.x},{character.velocity.y},{character.orientation[0]},{character.linear.x},{character.linear.y},{character.orientation},{character.steer},{character.colCollided}\n'
+    data = f'{time},{character.id},{character.position.x},{character.position.y},{character.velocity.x},{character.velocity.y},{character.linear.x},{character.linear.y},{character.orientation},{character.steer},{character.colCollided}\n'
+    return data
+
+#---Write initial trajectory data to file---#
+with open('trajectory_data.txt', 'a') as f:
+    for character in characterList:
+        f.write(returnTrajectory(character, 0.0))

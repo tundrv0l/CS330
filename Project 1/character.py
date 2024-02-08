@@ -16,9 +16,9 @@ ARRIVE = 8
 
 class Character:
 
-    def __init__(self, id, steer, position=None, velocity=None, orientation=None, linear=None,
-                 angular = None, maxVelocity=None, maxLinear=None, target=None, arriveRadius=None, 
-                 arriveSlow=None, arriveTime=None, colCollided=False):
+    def __init__(self, id, steer, position=vector.Vector(0,0), velocity=vector.Vector(0,0), orientation=0, linear=vector.Vector(0,0),
+                 angular=0, maxVelocity=0, maxLinear=0, target=0, arriveRadius=0, 
+                 arriveSlow=0, arriveTime=0, colCollided=False):
         '''
         Create a character object with default parameters.
         '''
