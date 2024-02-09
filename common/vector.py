@@ -1,7 +1,7 @@
 '''----------------- 
 # Author: Parker Clark
 # Date: 1/25/2024
-# Description: A class for vector functions. Used in common projects for CS309.
+# Description: A class for vector functions. Used in common projects for CS330.
 -----------------'''
 
 #---Imports---#
@@ -174,3 +174,15 @@ class Vector:
 
         length = self.getLength()
         return Vector(self.x / length, self.y / length, self.z / length)
+    
+    def null(self) -> 'Vector':
+        '''
+        A function that sets a vector to a null vector.
+
+        Returns
+        ----------
+        result: Vector
+            A null vector.
+        '''
+
+        return Vector(0, 0, 0)

@@ -14,6 +14,10 @@ SEEK = 6
 FLEE = 7
 ARRIVE = 8
 
+#---Global---#
+currentTime = 0.0 # Current time in the simulation. Begins at 0.
+stopVelocity = 0.02 # The lower velocity limit on which the simulation should stop a character.
+
 class Character:
 
     def __init__(self, id, steer, position=vector.Vector(0,0), velocity=vector.Vector(0,0), orientation=0, linear=vector.Vector(0,0),
@@ -102,7 +106,7 @@ checkCollisions = False
 
 #---Plot Variables---#
 
-# Plotting optins in order of: Position[0], Velocity[1], Linear[2],  Orientation[3], Paths[4], Collisions[5]
+# Plotting options in order of: Position[0], Velocity[1], Linear[2],  Orientation[3], Paths[4], Collisions[5]
 plotWhat = [True, True, True, False, False, False]
 plotScale = [2.0, 2.0, 20]
 plotCrossRefs = True

@@ -4,11 +4,13 @@
 # Description: A file that contains the movement functions for the characters.
 -----------------'''
 
-from character import *
+#---Imports---#
 import character
+from character import *
 import vector
+import math
 
-#TODO:Add main time loop. Add update function. make file handling not nuke everything after its closed.
+#TODO:Add main time loop. make file handling not nuke everything after its closed. Move niche functions elsewhere. Run a test. Add warnings for update
 
 #---Define return structure class---#
 class SteeringOutput:
@@ -148,7 +150,68 @@ def dynamicGetSteeringArrive(character: character.Character, target: character.C
     result.angular = 0.0
     return result
 
-#---Main time loop---#
+#---Support functions---#
+
+def getSign(value: float) -> int:
+    '''
+        A function that returns the sign of a value.
+
+        Parameters
+        ----------
+        value: float
+            The value to check the sign of.
+
+        Returns
+        ----------
+        sign: int
+            An int representing the sign of the value.
+    '''
+
+    return 0 if value == 0 else int(math.copysign(1, value))
+
+def dynamicUpdate(character: character.Character, steering: SteeringOutput, deltaTime: float, physics: bool) -> Character:
+
+    # Check to see what type of physics to use
+    if physics: # HS Physics
+        half_t_sq = 0.5 * deltaTime * deltaTime
+        character.position += character.velocity * deltaTime + steering.linear * half_t_sq
+        character.orientation += character.rotation * steering.angular * half_t_sq
+    else: # Newton-Euler 1
+        character.position += character.velocity * deltaTime
+        character.orientation += character.rotation * deltaTime
+    
+    # Correct character orientation
+    character.orientation = character.orientation % (2 * math.pi)
+
+    # Update the velocity and rotation
+    character.velocity += steering.linear * deltaTime
+    character.rotation += steering.angular * deltaTime
+
+    # Update the linear and angular acceleration
+    character.linear = steering.linear
+    character.angular = steering.angular
+
+    # Run checks for off-nominal conditions
+
+    # Check to see if the velocity is below tolerance
+    if character.velocity.getLength() < stopVelocity:
+        character.velocity.null()
+    
+    # Check to see if linear acceleration is above tolerance
+    if character.linear.getLength() > character.maxLinear:
+        character.linear.normalize()
+        character.linear *= character.maxLinear
+    
+    # Check to see if rotation is above tolerance
+    if character.rotation > character.maxRotation:
+        character.rotation = character.maxRotation * getSign(character.rotation)
+    
+    # Check to see if the angular acceleration is above tolerance
+    if character.angular > character.maxAngular:
+        character.angular = character.maxAngular * getSign(character.angular)
+    
+    return character
+    
 
 def returnTrajectory(character: character.Character, time: float) -> str:
     '''
@@ -172,6 +235,30 @@ def returnTrajectory(character: character.Character, time: float) -> str:
     return data
 
 #---Write initial trajectory data to file---#
-with open('trajectory_data.txt', 'a') as f:
-    for character in characterList:
-        f.write(returnTrajectory(character, 0.0))
+for element in characterList:
+    with open('trajectory_data.txt', 'a') as f:
+        f.write(returnTrajectory(element, currentTime))
+
+#---Main time loop---#
+while currentTime < stopTime:
+
+    # Increment the time
+    currentTime += deltaTime
+
+    for element in characterList:
+        
+        # Check the iterated character's steering behavior
+        if element.steer == CONTINUE:
+            steering = dynamicGetSteeringContinue(element)
+        elif element.steer == SEEK:
+            steering = dynamicGetSteeringSeek(element, element.target)
+        elif element.steer == FLEE:
+            steering = dynamicGetSteeringFlee(element, element.target)
+        elif element.steer == ARRIVE:
+            steering = dynamicGetSteeringArrive(element, element.target)
+
+        #TODO: Add update function for time loop
+            
+    for element in characterList:
+        with open('trajectory_data.txt', 'a') as f:
+            f.write(returnTrajectory(element, currentTime))
