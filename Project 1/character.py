@@ -14,14 +14,14 @@ SEEK = 6
 FLEE = 7
 ARRIVE = 8
 
-#---Global---#
+#---Timing globals---#
 currentTime = 0.0 # Current time in the simulation. Begins at 0.
 stopVelocity = 0.02 # The lower velocity limit on which the simulation should stop a character.
 
 class Character:
 
-    def __init__(self, id, steer, position=vector.Vector(0,0), velocity=vector.Vector(0,0), orientation=0, linear=vector.Vector(0,0),
-                 angular=0, maxVelocity=0, maxLinear=0, target=0, arriveRadius=0, 
+    def __init__(self, id, steer, position=vector.Vector(0,0), velocity=vector.Vector(0,0), orientation=0, rotation=0, linear=vector.Vector(0,0),
+                 angular=0, maxVelocity=0, maxLinear=0, maxRotation=0, maxAngular=0, arriveRadius=0, target=0, 
                  arriveSlow=0, arriveTime=0, colCollided=False):
         '''
         Create a character object with default parameters.
@@ -31,15 +31,20 @@ class Character:
         self.position = position
         self.velocity = velocity
         self.orientation = orientation
+        self.rotation = rotation
         self.linear = linear
         self.angular = angular
         self.maxVelocity = maxVelocity
         self.maxLinear = maxLinear
-        self.target = target
+        self.maxRotation = maxRotation
+        self.maxAngular = maxAngular
+        self.target = target 
         self.arriveRadius = arriveRadius
         self.arriveSlow = arriveSlow
         self.arriveTime = arriveTime
         self.colCollided = colCollided
+        
+        
 
     
 
@@ -63,7 +68,7 @@ character_26_02.velocity = vector.Vector(2, 7)
 character_26_02.orientation = math.pi/4
 character_26_02.maxVelocity = 8
 character_26_02.maxLinear = 1.5
-character_26_02.target = 1
+character_26_02.target = character_26_01
 
 #---Character 3---#
 '''
@@ -76,7 +81,7 @@ character_26_03.velocity = vector.Vector(0, 8)
 character_26_03.orientation = (3*math.pi)/4
 character_26_03.maxVelocity = 8
 character_26_03.maxLinear = 2
-character_26_03.target = 1
+character_26_03.target = character_26_01
 
 #---Character 4---#
 '''
@@ -89,7 +94,7 @@ character_26_04.velocity = vector.Vector(-9, 4)
 character_26_04.orientation = math.pi
 character_26_04.maxVelocity = 10
 character_26_04.maxLinear = 2
-character_26_04.target = 1
+character_26_04.target = character_26_01
 character_26_04.arriveRadius = 4
 character_26_04.arriveSlow = 32
 character_26_04.arriveTime = 1

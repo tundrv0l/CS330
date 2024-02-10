@@ -10,7 +10,7 @@ from character import *
 import vector
 import math
 
-#TODO:Add main time loop. make file handling not nuke everything after its closed. Move niche functions elsewhere. Run a test. Add warnings for update
+#TODO:Add main time loop. make file handling not nuke everything after its closed. Move niche functions elsewhere. Run a test.
 
 #---Define return structure class---#
 class SteeringOutput:
@@ -110,45 +110,50 @@ def dynamicGetSteeringArrive(character: character.Character, target: character.C
         character: Character
             The character object that is arriving.
 
-        target: Character
+        target: Character, optional
             The target character object that the character is 'arriving' at.
+            Default value is character_26_01.
 
         Returns
         ----------
         result: SteeringOutput
             A structure with the updated linear and angular acceleration.
-        '''
+    '''
     
-    # Create a new steering output object. Normalize a direction vector to the target.
+    # Create a new steering output object
     result = SteeringOutput(vector.Vector(0,0), 0.0)
-    direction = target.position - character.position
-    distance = direction.normalize()
 
-    # Check the to see if the character is within the arrive radius
+    # Calculate the direction to the target
+    direction = target.position - character.position
+    distance = direction.getLength()
+
+    # Check to see if the character is within the arrive radius
     if distance < character.arriveRadius:
-        targetSpeed = 0
+        result.linear.null()
+        return result
     elif distance > character.arriveSlow:
         targetSpeed = character.maxVelocity
     else:
-        targetSpeed = character.maxVelocity * (distance / character.arriveSlow)
+        targetSpeed = character.maxVelocity * distance / character.arriveSlow
     
-    #Calculate target velocity
+    # Scale the direction to the target to the target speed
     targetVelocity = direction
     targetVelocity.normalize()
-    targetVelocity *= targetSpeed
+    targetVelocity = targetVelocity * targetSpeed
 
-    #Accelerate up torwards the target
+    # calculate the linear acceleration
     result.linear = targetVelocity - character.velocity
-    result.linear /= character.arriveTime
+    result.linear = result.linear / character.arriveTime
 
-    # Run a check to see if the acceleration is too fast
+    # Check to see if the linear acceleration is above the max linear speed
     if result.linear.getLength() > character.maxLinear:
         result.linear.normalize()
-        result.linear *= character.maxLinear
+        result.linear = result.linear * character.maxLinear
     
-    #Set the angular to 0
+    # Return the steering output
     result.angular = 0.0
     return result
+
 
 #---Support functions---#
 
@@ -245,19 +250,20 @@ while currentTime < stopTime:
     # Increment the time
     currentTime += deltaTime
 
-    for element in characterList:
+    for i in range(len(characterList)):
         
         # Check the iterated character's steering behavior
-        if element.steer == CONTINUE:
-            steering = dynamicGetSteeringContinue(element)
-        elif element.steer == SEEK:
-            steering = dynamicGetSteeringSeek(element, element.target)
-        elif element.steer == FLEE:
-            steering = dynamicGetSteeringFlee(element, element.target)
-        elif element.steer == ARRIVE:
-            steering = dynamicGetSteeringArrive(element, element.target)
+        if characterList[i].steer == CONTINUE:
+            steering = dynamicGetSteeringContinue(characterList[i])
+        elif characterList[i].steer == SEEK:
+            steering = dynamicGetSteeringSeek(characterList[i], characterList[i].target)
+        elif characterList[i].steer == FLEE:
+            steering = dynamicGetSteeringFlee(characterList[i], characterList[i].target)
+        elif characterList[i].steer == ARRIVE:
+            steering = dynamicGetSteeringArrive(characterList[i], characterList[i].target)
 
-        #TODO: Add update function for time loop
+        # Update the character's position and velocity
+        characterList[i] = dynamicUpdate(characterList[i], steering, deltaTime, physics)
             
     for element in characterList:
         with open('trajectory_data.txt', 'a') as f:
