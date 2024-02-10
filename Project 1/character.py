@@ -78,7 +78,7 @@ Its behavior should allow this character to 'orbit' the origin.
 character_26_03 = Character(2603, SEEK)
 character_26_03.position = vector.Vector(-50, 40)
 character_26_03.velocity = vector.Vector(0, 8)
-character_26_03.orientation = (3*math.pi)/4
+character_26_03.orientation = (3*math.pi)/2
 character_26_03.maxVelocity = 8
 character_26_03.maxLinear = 2
 character_26_03.target = character_26_01

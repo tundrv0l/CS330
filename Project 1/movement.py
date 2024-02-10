@@ -240,9 +240,10 @@ def returnTrajectory(character: character.Character, time: float) -> str:
     return data
 
 #---Write initial trajectory data to file---#
-for element in characterList:
-    with open('trajectory_data.txt', 'a') as f:
-        f.write(returnTrajectory(element, currentTime))
+outputFile = open('trajectory_data.txt', 'w')
+
+for character in characterList:
+    outputFile.write(returnTrajectory(character, currentTime))
 
 #---Main time loop---#
 while currentTime < stopTime:
@@ -265,6 +266,7 @@ while currentTime < stopTime:
         # Update the character's position and velocity
         characterList[i] = dynamicUpdate(characterList[i], steering, deltaTime, physics)
             
-    for element in characterList:
-        with open('trajectory_data.txt', 'a') as f:
-            f.write(returnTrajectory(element, currentTime))
+        # Write the character's trajectory to the file
+        outputFile.write(returnTrajectory(characterList[i], currentTime))
+
+outputFile.close()
