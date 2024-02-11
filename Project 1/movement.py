@@ -17,7 +17,7 @@ class SteeringOutput:
     '''
     A class that contains the return linear and angular acceleration from a movement function.
     '''
-    def __init__(self, linear: vector.Vector, angular: float):
+    def __init__(self, linear = vector.Vector(0,0), angular= 0):
         '''
         Create a steering output object with default parameters.
         '''
@@ -64,13 +64,13 @@ def dynamicGetSteeringSeek(character: character.Character, target: character.Cha
         '''
     
     # Create a new steering output object
-    result = SteeringOutput(vector.Vector(0,0), 0.0)
+    result = SteeringOutput()
 
     # Calculate the direction to the target, normalize it, and scale it to the max linear speed.
     result.linear = target.position - character.position
     result.linear.normalize()
-    result.linear = result.linear * character.maxLinear
-    result.angular = 0.0
+    result.linear *=  character.maxLinear
+    result.angular = 0
     return result
 
 def dynamicGetSteeringFlee(character: character.Character, target: character.Character) -> SteeringOutput:
@@ -92,13 +92,13 @@ def dynamicGetSteeringFlee(character: character.Character, target: character.Cha
         '''
     
     # Create a new steering output object
-    result = SteeringOutput(vector.Vector(0,0), 0.0)
+    result = SteeringOutput()
 
     # Calculate the direction away from the target, scale and normalize it to the max linear speed.
     result.linear = character.position - target.position
     result.linear.normalize()
-    result.linear = result.linear * character.maxLinear
-    result.angular = 0.0
+    result.linear *= character.maxLinear
+    result.angular = 0
     return result
     
 def dynamicGetSteeringArrive(character: character.Character, target: character.Character) -> SteeringOutput:
@@ -121,7 +121,7 @@ def dynamicGetSteeringArrive(character: character.Character, target: character.C
     '''
     
     # Create a new steering output object
-    result = SteeringOutput(vector.Vector(0,0), 0.0)
+    result = SteeringOutput()
 
     # Calculate the direction to the target
     direction = target.position - character.position
@@ -129,29 +129,27 @@ def dynamicGetSteeringArrive(character: character.Character, target: character.C
 
     # Check to see if the character is within the arrive radius
     if distance < character.arriveRadius:
-        result.linear.null()
-        return result
+        targetSpeed = 0
     elif distance > character.arriveSlow:
         targetSpeed = character.maxVelocity
     else:
         targetSpeed = character.maxVelocity * distance / character.arriveSlow
     
     # Scale the direction to the target to the target speed
-    targetVelocity = direction
-    targetVelocity.normalize()
-    targetVelocity = targetVelocity * targetSpeed
+    direction.normalize()
+    targetVelocity = direction * targetSpeed
 
     # calculate the linear acceleration
     result.linear = targetVelocity - character.velocity
-    result.linear = result.linear / character.arriveTime
+    result.linear /= character.arriveTime
 
     # Check to see if the linear acceleration is above the max linear speed
     if result.linear.getLength() > character.maxLinear:
         result.linear.normalize()
-        result.linear = result.linear * character.maxLinear
+        result.linear *= character.maxLinear
     
     # Return the steering output
-    result.angular = 0.0
+    result.angular = 0
     return result
 
 
@@ -179,24 +177,28 @@ def dynamicUpdate(character: character.Character, steering: SteeringOutput, delt
     # Check to see what type of physics to use
     if physics: # HS Physics
         half_t_sq = 0.5 * deltaTime * deltaTime
-        character.position += character.velocity * deltaTime + steering.linear * half_t_sq
-        character.orientation += character.rotation * steering.angular * half_t_sq
+        character.position += (character.velocity * deltaTime) + (steering.linear * half_t_sq)
+        character.orientation += (character.rotation * deltaTime) + (steering.angular * half_t_sq)
     else: # Newton-Euler 1
-        character.position += character.velocity * deltaTime
-        character.orientation += character.rotation * deltaTime
+        character.position += (character.velocity * deltaTime)
+        character.orientation += (character.rotation * deltaTime)
     
     # Correct character orientation
     character.orientation = character.orientation % (2 * math.pi)
 
     # Update the velocity and rotation
-    character.velocity += steering.linear * deltaTime
-    character.rotation += steering.angular * deltaTime
+    character.velocity += (steering.linear * deltaTime)
+    character.rotation += (steering.angular * deltaTime)
 
     # Update the linear and angular acceleration
-    character.linear = steering.linear
-    character.angular = steering.angular
+    #character.linear = steering.linear
+    #character.angular = steering.angular
 
     # Run checks for off-nominal conditions
+
+    if character.velocity.getLength() > character.maxVelocity:
+        character.velocity.normalize()
+        character.velocity *= character.maxVelocity
 
     # Check to see if the velocity is below tolerance
     if character.velocity.getLength() < stopVelocity:
@@ -208,12 +210,12 @@ def dynamicUpdate(character: character.Character, steering: SteeringOutput, delt
         character.linear *= character.maxLinear
     
     # Check to see if rotation is above tolerance
-    if character.rotation > character.maxRotation:
-        character.rotation = character.maxRotation * getSign(character.rotation)
+    if character.rotation < 0.01:
+        character.rotation = 0
     
     # Check to see if the angular acceleration is above tolerance
-    if character.angular > character.maxAngular:
-        character.angular = character.maxAngular * getSign(character.angular)
+    #if character.angular > character.maxAngular:
+    #    character.angular = character.maxAngular * getSign(character.angular)
     
     return character
     
@@ -251,22 +253,25 @@ while currentTime < stopTime:
     # Increment the time
     currentTime += deltaTime
 
-    for i in range(len(characterList)):
+    for character in characterList:
         
         # Check the iterated character's steering behavior
-        if characterList[i].steer == CONTINUE:
-            steering = dynamicGetSteeringContinue(characterList[i])
-        elif characterList[i].steer == SEEK:
-            steering = dynamicGetSteeringSeek(characterList[i], characterList[i].target)
-        elif characterList[i].steer == FLEE:
-            steering = dynamicGetSteeringFlee(characterList[i], characterList[i].target)
-        elif characterList[i].steer == ARRIVE:
-            steering = dynamicGetSteeringArrive(characterList[i], characterList[i].target)
+        if character.steer == CONTINUE:
+            steering = dynamicGetSteeringContinue(character)
+        elif character.steer == SEEK:
+            steering = dynamicGetSteeringSeek(character, character.target)
+        elif character.steer == FLEE:
+            steering = dynamicGetSteeringFlee(character, character.target)
+        elif character.steer == ARRIVE:
+            steering = dynamicGetSteeringArrive(character, character.target)
 
         # Update the character's position and velocity
-        characterList[i] = dynamicUpdate(characterList[i], steering, deltaTime, physics)
             
         # Write the character's trajectory to the file
-        outputFile.write(returnTrajectory(characterList[i], currentTime))
+        character.linear = steering.linear
+        character.angular = steering.angular
+        character = dynamicUpdate(character, steering, deltaTime, physics)
+
+        outputFile.write(returnTrajectory(character, currentTime))
 
 outputFile.close()
