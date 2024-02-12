@@ -10,22 +10,20 @@ import math
 class Vector:
 
     #---Constructors---#
-    def __init__(self, x: int = 0, y: int = 0, z: int = 0) -> None:
+    def __init__(self, x: int = 0, y: int = 0) -> None:
         '''
         Constructor: Creates a vector with given values or a null vector if no values are provided
         '''
         self.x = x
         self.y = y
-        self.z = z
 
     #---Setters---#
-    def setVector(self, x: int, y: int, z: int) -> None:
+    def setVector(self, x: int, y: int) -> None:
         '''
         A function that sets the values of a vector.
         '''
         self.x = x
         self.y = y
-        self.z = z
 
     def getVector(self) -> 'Vector':
         '''
@@ -37,7 +35,7 @@ class Vector:
         '''
         A function that returns the length of a vector.
         '''
-        return math.sqrt(self.x * self.x + self.y * self.y + self.z * self.z)
+        return math.sqrt(math.pow(self.x, 2) + math.pow(self.y, 2))
         
     #---Operations---#
     def __add__(self, other: 'Vector') -> 'Vector':
@@ -55,7 +53,7 @@ class Vector:
             A resultant vector post addition.
         '''
 
-        return Vector(self.x + other.x, self.y + other.y, self.z + other.z)
+        return Vector(self.x + other.x, self.y + other.y)
     
     def __sub__(self, other: 'Vector') -> 'Vector':
         '''
@@ -72,7 +70,7 @@ class Vector:
             A resultant vector post subtraction.
         '''
 
-        return Vector(self.x - other.x, self.y - other.y, self.z - other.z)
+        return Vector(self.x - other.x, self.y - other.y)
     
     def __mul__(self, scalar: int) -> 'Vector':
         '''
@@ -89,7 +87,7 @@ class Vector:
             A resultant vector post multiplication.
         '''
 
-        return Vector(self.x * scalar, self.y * scalar, self.z * scalar)
+        return Vector(self.x * scalar, self.y * scalar)
 
     def __truediv__(self, scalar: int) -> 'Vector':
         '''
@@ -106,7 +104,7 @@ class Vector:
             A resultant vector post division.
         '''
 
-        return Vector(self.x / scalar, self.y / scalar, self.z / scalar)
+        return Vector(self.x / scalar, self.y / scalar)
     
     def __eq__(self, other: 'Vector') -> bool:
         '''
@@ -123,7 +121,7 @@ class Vector:
             A boolean value representing whether the two vectors are equal.
         '''
         if isinstance(other, Vector):
-            return self.x == other.x and self.y == other.y and self.z == other.z
+            return self.x == other.x and self.y == other.y
         return False
     
     def __ne__(self, other: 'Vector') -> bool:
@@ -141,7 +139,7 @@ class Vector:
             A boolean value representing whether the two vectors are not equal.
         '''
 
-        return self.x != other.x or self.y != other.y or self.z != other.z
+        return self.x != other.x or self.y != other.y
     
     #---Functions---#
 
@@ -160,7 +158,7 @@ class Vector:
             An integer representing the dot product of the two vectors.
         '''
 
-        return int(self.x * other.x + self.y * other.y + self.z * other.z)
+        return int(self.x * other.x + self.y * other.y)
     
     def normalize(self) -> 'Vector':
         '''
@@ -169,11 +167,13 @@ class Vector:
         Returns
         ----------
         result: Vector
-            A normalized vector.
+            An updated vector object with normalized values.
         '''
 
         length = self.getLength()
-        return Vector(self.x / length, self.y / length, self.z / length)
+
+        self.x /= length
+        self.y /= length
     
     def null(self) -> 'Vector':
         '''
@@ -185,4 +185,4 @@ class Vector:
             A null vector.
         '''
 
-        return Vector(0, 0, 0)
+        return Vector(0, 0)
