@@ -3,10 +3,10 @@
 # Date: 2/3/2024
 # Description: A class for the 'Character' object.
 -----------------'''
+
+#---Imports---#
 import vector
 import math
-
-#TODO: Make this file more dynamic for upcoming projects. Maybe rework init. Add better comments.
 
 #---Constants---#
 CONTINUE = 1
@@ -43,17 +43,13 @@ class Character:
         self.arriveSlow = arriveSlow
         self.arriveTime = arriveTime
         self.colCollided = colCollided
-        
-        
-
-    
 
 #---Setup Characters---#
 
 #---Character 1---#
 '''
 Character 1 sets up the 'continue' steering behavior.
-May also consider this the 'origin' character.
+May also consider this the 'origin' character that the other characters target.
 '''
 character_26_01 = Character(2601, CONTINUE)
 

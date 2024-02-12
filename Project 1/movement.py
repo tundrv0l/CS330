@@ -10,7 +10,8 @@ from character import *
 import vector
 import math
 
-#TODO:Add main time loop. make file handling not nuke everything after its closed. Move niche functions elsewhere. Run a test.
+#---Constants---#
+dataFile = 'trajectory_data.txt'
 
 #---Define return structure class---#
 class SteeringOutput:
@@ -26,7 +27,7 @@ class SteeringOutput:
 
 
 #---Movement Functions---#
-def dynamicGetSteeringContinue(character: character.Character) -> SteeringOutput:
+def dynamicGetSteeringContinue(character: Character) -> SteeringOutput:
     '''
         A function that returns the current linear and angular acceleration.
 
@@ -45,7 +46,7 @@ def dynamicGetSteeringContinue(character: character.Character) -> SteeringOutput
     result = SteeringOutput(character.linear, character.angular)
     return result
 
-def dynamicGetSteeringSeek(character: character.Character, target: character.Character) -> SteeringOutput:
+def dynamicGetSteeringSeek(character: Character, target: Character) -> SteeringOutput:
     '''
         A function that implements the 'Seek' Algorithm.
 
@@ -70,10 +71,12 @@ def dynamicGetSteeringSeek(character: character.Character, target: character.Cha
     result.linear = target.position - character.position
     result.linear.normalize()
     result.linear *=  character.maxLinear
+
+    # Set angular to 0 and return the steering output
     result.angular = 0
     return result
 
-def dynamicGetSteeringFlee(character: character.Character, target: character.Character) -> SteeringOutput:
+def dynamicGetSteeringFlee(character: Character, target: Character) -> SteeringOutput:
     '''
         A function that implements the 'Flee' algorithm.
 
@@ -94,14 +97,16 @@ def dynamicGetSteeringFlee(character: character.Character, target: character.Cha
     # Create a new steering output object
     result = SteeringOutput()
 
-    # Calculate the direction away from the target, scale and normalize it to the max linear speed.
+    # Calculate the direction away from the target, scale and normalize it to the max linear speed
     result.linear = character.position - target.position
     result.linear.normalize()
     result.linear *= character.maxLinear
+
+    # Set angular to 0 and return the steering output
     result.angular = 0
     return result
     
-def dynamicGetSteeringArrive(character: character.Character, target: character.Character) -> SteeringOutput:
+def dynamicGetSteeringArrive(character: Character, target: Character) -> SteeringOutput:
     '''
         A function that implements the 'Arrive' algorithm.
 
@@ -172,7 +177,29 @@ def getSign(value: float) -> int:
 
     return 0 if value == 0 else int(math.copysign(1, value))
 
-def dynamicUpdate(character: character.Character, steering: SteeringOutput, deltaTime: float, physics: bool) -> Character:
+def dynamicUpdate(character: Character, steering: SteeringOutput, deltaTime: float, physics: bool) -> Character:
+    '''
+        A function that returns the sign of a value.
+
+        Parameters
+        ----------
+        character: Character
+            The character object to update.
+
+        steering: SteeringOutput
+            The steering output object to update the character with.
+        
+        deltaTime: float
+            The current time step for the simulation.
+        
+        physics: bool
+            A boolean value to determine which physics model to use. True for HS Physics, False for Newton-Euler 1.
+
+        Returns
+        ----------
+        character: Character
+            An updated character object.
+    '''
 
     # Check to see what type of physics to use
     if physics: # HS Physics
@@ -191,8 +218,8 @@ def dynamicUpdate(character: character.Character, steering: SteeringOutput, delt
     character.rotation += (steering.angular * deltaTime)
 
     # Update the linear and angular acceleration
-    #character.linear = steering.linear
-    #character.angular = steering.angular
+    character.linear = steering.linear
+    character.angular = steering.angular
 
     # Run checks for off-nominal conditions
 
@@ -214,13 +241,13 @@ def dynamicUpdate(character: character.Character, steering: SteeringOutput, delt
         character.rotation = 0
     
     # Check to see if the angular acceleration is above tolerance
-    #if character.angular > character.maxAngular:
-    #    character.angular = character.maxAngular * getSign(character.angular)
+    if character.angular > character.maxAngular:
+        character.angular = character.maxAngular * getSign(character.angular)
     
     return character
     
 
-def returnTrajectory(character: character.Character, time: float) -> str:
+def returnTrajectory(character: Character, time: float) -> str:
     '''
         A function that returns the trajectory of the character in a comma separated string.
 
@@ -242,7 +269,7 @@ def returnTrajectory(character: character.Character, time: float) -> str:
     return data
 
 #---Write initial trajectory data to file---#
-outputFile = open('trajectory_data.txt', 'w')
+outputFile = open(dataFile, 'w')
 
 for character in characterList:
     outputFile.write(returnTrajectory(character, currentTime))
@@ -268,8 +295,6 @@ while currentTime < stopTime:
         # Update the character's position and velocity
             
         # Write the character's trajectory to the file
-        character.linear = steering.linear
-        character.angular = steering.angular
         character = dynamicUpdate(character, steering, deltaTime, physics)
 
         outputFile.write(returnTrajectory(character, currentTime))
