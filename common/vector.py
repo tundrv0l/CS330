@@ -142,8 +142,8 @@ class Vector:
         return self.x != other.x or self.y != other.y
     
     #---Functions---#
-
-    def dotProduct(self, other: 'Vector') -> int:
+    @staticmethod
+    def dotProduct(a: 'Vector', b: 'Vector') -> int:
         '''
         A function that calculates the dot product of two vectors.
 
@@ -158,7 +158,7 @@ class Vector:
             An integer representing the dot product of the two vectors.
         '''
 
-        return int(self.x * other.x + self.y * other.y)
+        return int(a.x * b.x + a.y * b.y)
     
     def normalize(self) -> 'Vector':
         '''
