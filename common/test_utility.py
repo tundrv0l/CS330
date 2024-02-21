@@ -1,13 +1,14 @@
 '''----------------- 
 # Author: Parker Clark
 # Date: 1/29/2024
-# Description: A unit test for the vector class. Used in common projects for CS309 (I got bored).
+# Description: A unit test for the utility/vector class. Used in common projects for CS309 (I got bored).
 -----------------'''
 
 #---Imports---#
 import math
 import unittest
-from vector import Vector
+from utility import Vector
+from utility import Utility
 
 class TestVector(unittest.TestCase):
     def test_default_constructor(self):
