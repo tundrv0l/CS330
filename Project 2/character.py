@@ -141,3 +141,23 @@ elif (scenario == 27):
     character_27_01.pathToFollow = 1
     character_27_01.pathOffset = 0.04
 
+    #---Other Scenario Variables---#
+    characterList = [character_27_01]
+    characterCount = 1
+
+    #---Path Variables---#
+    path_27_01 = Path(2701, [0, -20, 20, -40, 40. -60, 60, 0], [90, 65, 40, 15, -10, -35, -60, -85])
+    pathList = [path_27_01] # NOTE: Might need to change this
+
+    #---Simulation Variables---#
+    physics = False #True for HS Physics, False for Newton-Euler 1 integration.
+    deltaTime = 0.50 # Time step duration (in seconds)
+    stopTime = 120 # Time to stop the simulation (in seconds)
+    checkCollisions = False
+
+    #---Plot Variables---#
+
+    # Plotting options in order of: Position[0], Velocity[1], Linear[2],  Orientation[3], Paths[4], Collisions[5]
+    plotWhat = [True, True, True, False, True, False]
+    plotScale = [4.0, 4.0, 40]
+    plotCrossRefs = True

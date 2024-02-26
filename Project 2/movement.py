@@ -7,7 +7,9 @@
 #---Imports---#
 import character
 from character import *
-import vector
+from utility import Vector
+from utility import Utility
+from path import Path
 import math
 
 #---Constants---#
@@ -157,6 +159,47 @@ def dynamicGetSteeringArrive(character: Character, target: Character) -> Steerin
     result.angular = 0
     return result
 
+def getSteeringFollowPath(character: Character, path: Path) -> SteeringOutput:
+    '''
+        A function that implements the 'Chase the Rabbit' algorithm.
+
+        Parameters
+        ----------
+        character: Character
+            The character object that is following the path.
+
+        path: Path
+            The path object that the character is following.
+
+        Returns
+        ----------
+        result: SteeringOutput
+            A structure with the updated linear and angular acceleration.
+    '''
+    
+    # Create a new steering output object
+    result = SteeringOutput()
+
+    # Get the current position on the path
+    currentPath = path.getParam(character.position)
+
+    # Get the target position on the path
+    targetPath = currentPath + character.pathOffset
+
+    # Check to see if the character is at the end of the path
+    if targetPath == 1:
+        targetPath = 1
+
+    targetPosition = path.getPosition(targetPath)
+
+    # Need to create a new character object to seek the target position
+    nextTarget = Character(position=targetPosition)
+
+    # Seek the target position on the path
+    result = dynamicGetSteeringSeek(character, nextTarget)
+
+    # Return the steering output
+    return result
 
 #---Support functions---#
 
@@ -291,6 +334,8 @@ while currentTime < stopTime:
             steering = dynamicGetSteeringFlee(character, character.target)
         elif character.steer == ARRIVE:
             steering = dynamicGetSteeringArrive(character, character.target)
+        elif character.steer == FOLLOW_PATH:
+            steering = getSteeringFollowPath(character, pathList[character.pathToFollow])
 
         # Update the character's position and velocity
             
