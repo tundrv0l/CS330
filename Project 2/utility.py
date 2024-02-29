@@ -199,7 +199,7 @@ class Utility:
     #---Line Functions---#
 
     @staticmethod
-    def closestPointOnLine(self, point: Vector, lineStart: Vector, lineEnd: Vector) -> Vector:
+    def closestPointOnLine(point: Vector, lineStart: Vector, lineEnd: Vector) -> Vector:
         '''
         A function that returns the closest point on a line to a given point.
 
@@ -228,7 +228,7 @@ class Utility:
         return (lineStart + (lineClosest * (lineDirection)))
     
     @staticmethod
-    def closestPointOnSegment(self, point: Vector, lineStart: Vector, lineEnd: Vector) -> Vector:
+    def closestPointOnSegment(point: Vector, lineStart: Vector, lineEnd: Vector) -> Vector:
         '''
         A function that returns the closest point on a line segment to a given point.
 
@@ -264,7 +264,7 @@ class Utility:
             return (lineStart + (lineClosest * (lineDirection)))
     
     @staticmethod
-    def distanceBetweenPoints(self, pointA : Vector, pointB : Vector):
+    def distanceBetweenPoints(pointA: Vector, pointB: Vector):
         '''
         A function that returns the distance between two points.
 
@@ -278,10 +278,9 @@ class Utility:
 
         Returns
         ----------
-        result: int
+        result: float
             The distance between the two points.
         '''
-        
-        return(math.sqrt(pow((pointB.x - pointA.x), 2) + (pow(pointB.y - pointA.y), 2)))
+        return math.sqrt(pow((pointB.x - pointA.x), 2) + pow((pointB.y - pointA.y), 2))
         
 
