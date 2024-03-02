@@ -20,7 +20,7 @@ class SteeringOutput:
     '''
     A class that contains the return linear and angular acceleration from a movement function.
     '''
-    def __init__(self, linear = vector.Vector(0,0), angular= 0):
+    def __init__(self, linear = Vector(0,0), angular= 0):
         '''
         Create a steering output object with default parameters.
         '''
@@ -193,7 +193,7 @@ def getSteeringFollowPath(character: Character, path: Path) -> SteeringOutput:
     targetPosition = path.getPosition(targetPath)
 
     # Need to create a new character object to seek the target position
-    nextTarget = Character(position=targetPosition)
+    nextTarget = Character(0, CONTINUE, position=targetPosition)
 
     # Seek the target position on the path
     result = dynamicGetSteeringSeek(character, nextTarget)

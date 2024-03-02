@@ -7,6 +7,7 @@
 
 #---Imports---#
 import math
+from typing import Union
 
 class Vector:
 
@@ -73,13 +74,13 @@ class Vector:
 
         return Vector(self.x - other.x, self.y - other.y)
     
-    def __mul__(self, scalar: int) -> 'Vector':
+    def __mul__(self, scalar: Union[int, float]) -> 'Vector':
         '''
         A function that multiplies a vector by a scalar. Overloads the '*' operator for vectors.
 
         Parameters
         ----------
-        scalar: int
+        scalar: Union[int, float]
             The scalar to multiply the vector by.
         
         Returns
@@ -261,7 +262,7 @@ class Utility:
         elif lineClosest >= 1:
             return lineEnd
         else:
-            return (lineStart + (lineClosest * (lineDirection)))
+            return lineStart + (lineDirection * lineClosest)
     
     @staticmethod
     def distanceBetweenPoints(pointA: Vector, pointB: Vector):

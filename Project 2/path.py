@@ -53,7 +53,7 @@ class Path:
         self.param = (self.pathSegments + 1) * [0] # Replicate pathSegments into a list for line parameter
 
         for i in range(1, self.pathSegments + 1):
-            self.param[i] = self.distance / max(self.distance)
+            self.param[i] = self.distance[i] / max(self.distance)
 
     def getPosition(self, param):
         '''
@@ -81,7 +81,7 @@ class Path:
         pointB = Vector (self.x[index +1], self.y[index + 1])
 
         T = (param - self.param[i]) / (self.param[i+1]- self.param[i])
-        position = pointA + (T * (pointB - pointA))
+        position = pointA + ((pointB - pointA) * T )
         return(position)
     
     def getParam(self, position):
@@ -122,7 +122,10 @@ class Path:
         pointB = Vector(self.x[closestSegment + 1], self.y[closestSegment + 1])
         paramB = self.param[closestSegment]
 
+        closestMinusA = closestPoint - pointA
+        BMinusA = pointB - pointA
+
         # Calculate and return the param
-        T = Vector(closestPoint - pointA).getLength() / Vector(pointB - pointA).getLength()
+        T = closestMinusA.getLength() / BMinusA.getLength()
         return (paramA + (T * (paramB - paramA)))
 

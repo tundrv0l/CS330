@@ -138,7 +138,7 @@ elif (scenario == 27):
     character_27_01.orientation = 0
     character_27_01.maxVelocity = 4
     character_27_01.maxLinear = 2
-    character_27_01.pathToFollow = 1
+    character_27_01.pathToFollow = 0
     character_27_01.pathOffset = 0.04
 
     #---Other Scenario Variables---#
