@@ -53,7 +53,7 @@ class Path:
         self.param = (self.pathSegments + 1) * [0] # Replicate pathSegments into a list for line parameter
 
         for i in range(1, self.pathSegments + 1):
-            self.param[i] = self.distance[i] / max(self.distance)
+            self.param[i] = self.distance[i] /self.distance[-1] 
 
     def getPosition(self, param):
         '''
@@ -70,7 +70,7 @@ class Path:
             The current position of the path.
         '''
 
-        for i in range(self.pathSegments+1):
+        for i in range(self.pathSegments + 1):
             if param > self.param[i]:
                 index = i
             else: # Break the loop, if the given param is not greater then whats already in the object
@@ -78,9 +78,9 @@ class Path:
         
         # Define point positions on the line
         pointA = Vector(self.x[index], self.y[index])
-        pointB = Vector (self.x[index +1], self.y[index + 1])
+        pointB = Vector(self.x[index + 1], self.y[index + 1])
 
-        T = (param - self.param[i]) / (self.param[i+1]- self.param[i])
+        T = (param - self.param[index]) / (self.param[index + 1] - self.param[index])
         position = pointA + ((pointB - pointA) * T )
         return(position)
     
@@ -105,7 +105,7 @@ class Path:
             
             # Generate points off of the segment
             pointA = Vector(self.x[i], self.y[i])
-            pointB = Vector (self.x[i +1], self.y[i + 1])
+            pointB = Vector (self.x[i + 1], self.y[i + 1])
 
             checkPoint = Utility.closestPointOnSegment(position, pointA, pointB)
             checkDistance = Utility.distanceBetweenPoints(position, checkPoint)
@@ -120,12 +120,10 @@ class Path:
         paramA = self.param[closestSegment]
 
         pointB = Vector(self.x[closestSegment + 1], self.y[closestSegment + 1])
-        paramB = self.param[closestSegment]
+        paramB = self.param[closestSegment + 1]
 
-        closestMinusA = closestPoint - pointA
-        BMinusA = pointB - pointA
 
         # Calculate and return the param
-        T = closestMinusA.getLength() / BMinusA.getLength()
+        T = (closestPoint - pointA).getLength() / (pointB - pointA).getLength()
         return (paramA + (T * (paramB - paramA)))
 

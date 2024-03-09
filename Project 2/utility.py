@@ -226,7 +226,7 @@ class Utility:
 
         # Find the closest point on the line to the given point.
         lineClosest = Vector.dotProduct(fromPoint, lineDirection) / Vector.dotProduct(lineDirection, lineDirection)
-        return (lineStart + (lineClosest * (lineDirection)))
+        return (lineStart + (lineDirection * lineClosest))
     
     @staticmethod
     def closestPointOnSegment(point: Vector, lineStart: Vector, lineEnd: Vector) -> Vector:
@@ -282,6 +282,6 @@ class Utility:
         result: float
             The distance between the two points.
         '''
-        return math.sqrt(pow((pointB.x - pointA.x), 2) + pow((pointB.y - pointA.y), 2))
+        return math.sqrt(math.pow((pointB.x - pointA.x), 2) + math.pow((pointB.y - pointA.y), 2))
         
 

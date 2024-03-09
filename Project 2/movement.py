@@ -187,7 +187,7 @@ def getSteeringFollowPath(character: Character, path: Path) -> SteeringOutput:
     targetPath = currentPath + character.pathOffset
 
     # Check to see if the character is at the end of the path
-    if targetPath == 1:
+    if targetPath > 1:
         targetPath = 1
 
     targetPosition = path.getPosition(targetPath)
