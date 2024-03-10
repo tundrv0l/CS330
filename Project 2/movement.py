@@ -8,7 +8,6 @@
 import character
 from character import *
 from utility import Vector
-from utility import Utility
 from path import Path
 import math
 

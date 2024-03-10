@@ -146,13 +146,13 @@ elif (scenario == 27):
     characterCount = 1
 
     #---Path Variables---#
-    path_27_01 = Path(2701, [0, -20, 20, -40, 40. -60, 60, 0], [90, 65, 40, 15, -10, -35, -60, -85])
-    pathList = [path_27_01] # NOTE: Might need to change this
+    path_27_01 = Path(2701, [0, -20, 20, -40, 40, -60, 60, 0], [90, 65, 40, 15, -10, -35, -60, -85])
+    pathList = [path_27_01]
 
     #---Simulation Variables---#
     physics = False #True for HS Physics, False for Newton-Euler 1 integration.
     deltaTime = 0.50 # Time step duration (in seconds)
-    stopTime = 120 # Time to stop the simulation (in seconds)
+    stopTime = 125 # Time to stop the simulation (in seconds)
     checkCollisions = False
 
     #---Plot Variables---#

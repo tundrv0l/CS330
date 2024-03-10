@@ -81,7 +81,7 @@ class Path:
         pointB = Vector(self.x[index + 1], self.y[index + 1])
 
         T = (param - self.param[index]) / (self.param[index + 1] - self.param[index])
-        position = pointA + ((pointB - pointA) * T )
+        position = pointA + ((pointB - pointA) * T)
         return(position)
     
     def getParam(self, position):

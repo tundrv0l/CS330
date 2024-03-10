@@ -7,6 +7,7 @@
 
 #---Imports---#
 import math
+from typing import Union
 
 class Vector:
 
@@ -73,13 +74,13 @@ class Vector:
 
         return Vector(self.x - other.x, self.y - other.y)
     
-    def __mul__(self, scalar: int) -> 'Vector':
+    def __mul__(self, scalar: Union[int, float, 'Vector']) -> 'Vector':
         '''
         A function that multiplies a vector by a scalar. Overloads the '*' operator for vectors.
 
         Parameters
         ----------
-        scalar: int
+        scalar: Union[int, float]
             The scalar to multiply the vector by.
         
         Returns
@@ -199,7 +200,7 @@ class Utility:
     #---Line Functions---#
 
     @staticmethod
-    def closestPointOnLine(self, point: Vector, lineStart: Vector, lineEnd: Vector) -> Vector:
+    def closestPointOnLine(point: Vector, lineStart: Vector, lineEnd: Vector) -> Vector:
         '''
         A function that returns the closest point on a line to a given point.
 
@@ -225,10 +226,10 @@ class Utility:
 
         # Find the closest point on the line to the given point.
         lineClosest = Vector.dotProduct(fromPoint, lineDirection) / Vector.dotProduct(lineDirection, lineDirection)
-        return (lineStart + (lineClosest * (lineDirection)))
+        return (lineStart + (lineDirection * lineClosest))
     
     @staticmethod
-    def closestPointOnSegment(self, point: Vector, lineStart: Vector, lineEnd: Vector) -> Vector:
+    def closestPointOnSegment(point: Vector, lineStart: Vector, lineEnd: Vector) -> Vector:
         '''
         A function that returns the closest point on a line segment to a given point.
 
@@ -261,6 +262,26 @@ class Utility:
         elif lineClosest >= 1:
             return lineEnd
         else:
-            return (lineStart + (lineClosest * (lineDirection)))
+            return lineStart + (lineDirection * lineClosest)
+    
+    @staticmethod
+    def distanceBetweenPoints(pointA: Vector, pointB: Vector):
+        '''
+        A function that returns the distance between two points.
+
+        Parameters
+        ----------
+        pointA: Vector
+            First point to find distance from.
+
+        pointB: Vector
+            Second point to find distance to.
+
+        Returns
+        ----------
+        result: float
+            The distance between the two points.
+        '''
+        return math.sqrt(math.pow((pointB.x - pointA.x), 2) + math.pow((pointB.y - pointA.y), 2))
         
 

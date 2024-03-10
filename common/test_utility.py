@@ -58,6 +58,44 @@ class TestVector(unittest.TestCase):
         v17 = Vector(1, 2)
         v18 = Vector(4, 5)
         self.assertNotEqual(v17, v18)
+    
+    def test_dot_product(self):
+        v19 = Vector(1, 2)
+        v20 = Vector(3, 4)
+        self.assertEqual(Vector.dotProduct(v19, v20), 11)
+    
+    def test_set_vector(self):
+        v21 = Vector()
+        v21.setVector(5, 6)
+        self.assertEqual(v21.x, 5)
+        self.assertEqual(v21.y, 6)
+    
+    def test_get_vector(self):
+        v22 = Vector(3, 4)
+        self.assertEqual(v22.getVector(), Vector(3, 4))
+    
+    def test_null(self):
+        v23 = Vector(1, 2)
+        null_vector = v23.null()
+        self.assertEqual(null_vector.x, 0)
+        self.assertEqual(null_vector.y, 0)
+
+
+class TestUtility(unittest.TestCase):
+    
+    #---Test Variables---#
+    pointVector = Vector(5,5)
+    lineStart = Vector(1,1)
+    lineEnd = Vector(10,10)
+
+    def test_closest_point_on_line(self):
+        self.assertEqual(Utility.closestPointOnLine(self.pointVector, self.lineStart, self.lineEnd), Vector(5,5))
+
+    def test_distance_between_points(self):
+        self.assertEqual(Utility.distanceBetweenPoints(self.pointVector, self.lineEnd), 7.0710678118654755)
+    
+    def test_closest_point_on_segment(self):
+        self.assertEqual(Utility.closestPointOnSegment(self.pointVector, self.lineStart, self.lineEnd), Vector(5,5))
 
 if __name__ == '__main__':
     unittest.main()
