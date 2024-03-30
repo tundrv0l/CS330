@@ -28,8 +28,8 @@ class AStarAlgorithm:
 
         Parameters
         ----------  
-        currentNode: Node
-            The current node object.
+        currentNode: int
+            The current node.
 
         Returns
         ----------
@@ -106,3 +106,71 @@ class AStarAlgorithm:
             path = []
 
         return path
+    
+    def findPath(self, first, last):
+        '''
+        Utilize A* to find the path between two nodes.
+
+        Parameters
+        ----------  
+        first: int
+            The starting node.
+        
+        last: int
+            The ending node
+        '''
+
+        # Reset the nodes in the graph.
+        for i in range(1, len(self.graph.currentNodes)):
+            self.graph.currentNodes[i].status = 0
+            self.graph.currentNodes[i].costSoFar = float('inf')
+            self.graph.currentNodes[i].previous = 0
+
+        # Set the node status to open and the cost to 0.
+        self.graph.currentNodes[first].status = 2
+        self.graph.currentNodes[first].costSoFar = 0
+
+        # Initialize the open list with the first node, and a control variable.
+        iteration = 0
+        openList = [first]
+
+        # Iterate through the graph and find the path.
+        while len(openList) > 0:
+            iteration += 1
+
+            # Find the node with the lowest total cost in the open list.
+            currentNode = self.findLowest(openList)
+
+            # If the current node is the last node, break the loop.
+            if currentNode == last:
+                break
+
+            # Get the connections from the current node.
+            currentConnections = self.getConnections(currentNode)
+
+            # Iterate through the connections and update the nodes.
+            for connection in currentConnections:
+
+                # Get the next node on the connection and the cost.
+                nextNode = connection.toNode
+                nextCost = self.graph.currentNodes[currentNode].costSoFar + connection.cost
+
+                # If the next node has a lower cost, update the node.
+                if nextCost < self.graph.currentNodes[nextNode].costSoFar:
+                    
+                    # Open the next node on the path, and update the previous node.
+                    self.graph.currentNodes[nextNode].status = 2
+                    self.graph.currentNodes[nextNode].previous = currentNode
+                    
+                    # Update the cost, heuristic, and total values.
+                    self.graph.currentNodes[nextNode].costSoFar = nextCost
+                    self.graph.currentNodes[nextNode].heuristic = self.graph.currentNodes[nextNode].heuristicDistance(self.graph.currentNodes[last])
+                    self.graph.currentNodes[nextNode].total = self.graph.currentNodes[nextNode].costSoFar + self.graph.currentNodes[nextNode].heuristic
+
+                    # Add the next node to the open list.
+                    if nextNode not in openList:
+                        openList.append(nextNode)
+
+        # Close the current node.        
+        self.graph.currentNodes[currentNode].status = 3
+        openList.remove(currentNode)

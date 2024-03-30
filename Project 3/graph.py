@@ -34,14 +34,14 @@ class Graph:
         self.currentNodes = [Node()]
 
         # Iterate through read data and instantiate nodes.
-        for i in nodeFileRead:
+        for nodeRow in nodeFileRead:
 
             # Ignore comments in the node file.
-            if i[0] == '#':
+            if nodeRow[0] == '#':
                 continue
 
             # Split the current row delimted by a comma.
-            currentRow = i.split(',')
+            currentRow = nodeRow.split(',')
 
             # Create a new node from the read in data, append it to the list
 

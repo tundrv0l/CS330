@@ -70,6 +70,19 @@ class Node:
         '''
         return math.sqrt((self.positionX - node.positionX)**2 + (self.positionY - node.positionY)**2)
     
+    def reset(self):
+        '''
+        Reset the given node object.
+
+        Parameters
+        ----------
+        self: Node
+            The node object being reset.
+        '''
+        self.status = 0
+        self.costSoFar = float('inf')
+        self.previous = 0
+    
 
 class Connection:
     
