@@ -5,7 +5,6 @@
 -----------------'''
 
 from graph import Graph
-from pathfinding import Node
 
 
 class AStarAlgorithm:
@@ -171,6 +170,6 @@ class AStarAlgorithm:
                     if nextNode not in openList:
                         openList.append(nextNode)
 
-        # Close the current node.        
-        self.graph.currentNodes[currentNode].status = 3
-        openList.remove(currentNode)
+            # Close the current node.        
+            self.graph.currentNodes[currentNode].status = 3
+            openList.remove(currentNode)

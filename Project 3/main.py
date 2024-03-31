@@ -24,6 +24,7 @@ def main():
 
     # Define a list of key data points, each sublist is a start and end point respectively 
     dataPoints = [
+        [1, 59],
         [1, 29], 
         [1, 38],
         [11, 1],
@@ -44,7 +45,7 @@ def main():
         path = astar.retrievePath(start, end)
 
         # Write the path to the output file
-        outputFile.write(f"Path from {start} to {end}: {path}\n")
+        outputFile.write(f"Path from {start} to {end}: {path[::-1]}\n")
 
     # Close the output file
     outputFile.close()
