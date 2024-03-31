@@ -4,7 +4,6 @@
 # Description: A driver file for Program Assignment 3.
 -----------------'''
 
-
 #---Imports---#
 from graph import Graph
 from astarAlgorithm import AStarAlgorithm
