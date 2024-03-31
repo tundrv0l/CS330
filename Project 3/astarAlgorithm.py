@@ -173,3 +173,6 @@ class AStarAlgorithm:
             # Close the current node.        
             self.graph.currentNodes[currentNode].status = 3
             openList.remove(currentNode)
+
+            # Set an attribute to return the last node's total cost.
+            self.totalCost = self.graph.currentNodes[last].costSoFar
