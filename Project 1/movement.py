@@ -7,7 +7,7 @@
 #---Imports---#
 import character
 from character import *
-import vector
+from utility import *
 import math
 
 #---Constants---#
@@ -18,7 +18,7 @@ class SteeringOutput:
     '''
     A class that contains the return linear and angular acceleration from a movement function.
     '''
-    def __init__(self, linear = vector.Vector(0,0), angular= 0):
+    def __init__(self, linear = Vector(0,0), angular= 0):
         '''
         Create a steering output object with default parameters.
         '''
