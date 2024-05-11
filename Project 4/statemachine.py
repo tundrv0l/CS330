@@ -201,7 +201,7 @@ def main():
                         state = ACCELERATE
                         accelerateAction(file)
                     elif randomNum < transitionProbability[1] + transitionProbability[3]:
-                        transitionCount[2] += 1
+                        transitionCount[3] += 1
                         state = PULL_IN_BEHIND
                         pullInBehindAction(file)
                     else:
