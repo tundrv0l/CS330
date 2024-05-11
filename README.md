@@ -51,12 +51,9 @@ python3 test_utility.py
 
 ## Referencing and Credit
 
-As is explained in the class, if you would like to use this repository as reference, please feel free. However, if you are looking at a particular section of this code that you decide to use as reference **you MUST attribute the author (Parker Clark) and the repository from which you found it!!!**. This repository is **not for replication** and is effectively read-only.
+As is explained in the class, if you would like to use this repository as reference, please feel free. However, if you are looking at a particular section of this code that you decide to use as reference **you MUST attribute the author (Parker Clark) and the repository from which you found it!** This repository is **not for replication** and is effectively read-only.
 
 In good faith, I have provided a link of this repository to the Mr.Jay Sebastian (the current course coordinator at the time of writing). If you use this repository improperly, he will know, so please abide by these rules. 
-
-
-## Contact
 
 
 ---
